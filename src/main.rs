@@ -11,6 +11,7 @@ use anyhow::Context;
 use clap::Parser;
 use log::{error, info, warn};
 use std::path::PathBuf;
+use secrecy::SecretString;
 
 const AVAILABLE_SERVICES: &[&str] = &["github", "mailgun", "zulip"];
 const USER_AGENT: &str = "rust-lang teams sync (https://github.com/rust-lang/sync-team)";
@@ -106,7 +107,7 @@ fn app() -> anyhow::Result<()> {
             }
             "zulip" => {
                 let username = get_env("ZULIP_USERNAME")?;
-                let token = get_env("ZULIP_API_TOKEN")?;
+                let token = SecretString::from(get_env("ZULIP_API_TOKEN")?);
                 let sync = SyncZulip::new(username, token, &team_api, dry_run)?;
                 let diff = sync.diff_all()?;
                 if !diff.is_empty() {

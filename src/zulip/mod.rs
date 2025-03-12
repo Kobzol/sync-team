@@ -5,6 +5,7 @@ use api::{ZulipApi, ZulipStream, ZulipUserGroup};
 use rust_team_data::v1::{ZulipGroupMember, ZulipStreamMember};
 
 use std::collections::BTreeMap;
+use secrecy::SecretString;
 
 pub(crate) struct SyncZulip {
     zulip_controller: ZulipController,
@@ -15,7 +16,7 @@ pub(crate) struct SyncZulip {
 impl SyncZulip {
     pub(crate) fn new(
         username: String,
-        token: String,
+        token: SecretString,
         team_api: &TeamApi,
         dry_run: bool,
     ) -> anyhow::Result<Self> {
